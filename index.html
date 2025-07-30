@@ -10,15 +10,16 @@
 
 <body>
     <h1>Welcome To World Of Coders</h1>
-    <button class="button-three" id="btn" onclick="recognition.start()">
-        Click To Speak
+    <button class="button-three" id="btn" onclick="startRecognition()" aria-label="Start Speech Recognition">
+        🎤 Click To Speak
     </button>
     <div id="result" class="container">
-        <p>Text is shown here</p>
+        <p id="text-output">Text is shown here</p>
     </div>
-    <button class="button-three" onclick="copyDivToClipboard()">
-        Copy the text
+    <button class="button-three" onclick="copyDivToClipboard()" aria-label="Copy Text to Clipboard">
+        📋 Copy the text
     </button>
+    <div id="feedback" class="feedback"></div>
     <script src="./index.js"></script>
 </body>
 

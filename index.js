@@ -1,22 +1,33 @@
-const btn = document.getElementById('btn');
-const results = document.getElementById('result');
-const speechRecognition =
-  window.speechRecognition || window.webkitSpeechRecognition;
-const recognition = new speechRecognition();
-recognition.onstart = function () {
-  console.log('you can speek now');
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'en-US';
+recognition.interimResults = false;
+
+const resultDiv = document.getElementById('text-output');
+const feedbackDiv = document.getElementById('feedback');
+
+function startRecognition() {
+    feedbackDiv.textContent = 'Listening...';
+    recognition.start();
+}
+
+recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    resultDiv.textContent = transcript;
+    feedbackDiv.textContent = 'Speech recognized successfully!';
 };
-recognition.onresult = function (event) {
-  var text = event.results[0][0].transcript;
-  console.log(text);
-  document.getElementById('result').innerHTML = text;
+
+recognition.onerror = (event) => {
+    feedbackDiv.textContent = `Error: ${event.error}`;
 };
+
+recognition.onend = () => {
+    feedbackDiv.textContent = '';
+};
+
 function copyDivToClipboard() {
-  var range = document.createRange();
-  range.selectNode(document.getElementById('result'));
-  window.getSelection().removeAllRanges(); // clear current selection
-  window.getSelection().addRange(range); // to select text
-  document.execCommand('copy');
-  window.getSelection().removeAllRanges(); // to deselect
-  alert('Copied the text:');
+    const text = resultDiv.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        feedbackDiv.textContent = 'Text copied to clipboard!';
+        setTimeout(() => (feedbackDiv.textContent = ''), 2000);
+    });
 }
